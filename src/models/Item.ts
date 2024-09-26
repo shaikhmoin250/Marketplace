@@ -16,4 +16,6 @@ const ItemSchema:Schema = new Schema({
     image : { type: String}
 });
 
+ItemSchema.index({name:'text', description:'text'});
+
 export default mongoose.model<Item>('Item', ItemSchema);

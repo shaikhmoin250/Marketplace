@@ -11,7 +11,13 @@ export class ItemService {
     return await Item.findByIdAndUpdate(id, itemData, { new: true });
   }
 
-  async getItems(query: any) {
-    return await Item.find(query);
+  async getItems(req: any) {
+    const query = req.query;
+    console.log("query ", query);
+    return await Item.find({
+      $text: {
+        $search: query.search,
+      },
+    });
   }
 }

@@ -4,15 +4,16 @@ import passport from "passport";
 import config from "./config";
 import authRoutes from "./routes/authRoutes";
 import itemRoutes from "./routes/itemRoutes";
+import transactionRoutes from "./routes/transactionRoutes";
 
 const app = express();
 
 app.use(express.json());
 app.use(passport.initialize());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/item', itemRoutes);
-
+app.use("/api/auth", authRoutes);
+app.use("/api/item", itemRoutes);
+app.use("/api/transaction", transactionRoutes);
 
 mongoose
   .connect(config.MONGODB_URI)
