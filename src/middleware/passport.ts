@@ -1,17 +1,20 @@
 import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
-import { Stategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import passportLocal from "passport-local";
+import passportJwt from "passport-jwt";
 import User from "../models/User";
 import config from "../config";
 import bcrypt from "bcrypt";
+
+const LocalStrategy = passportLocal.Strategy;
+const JwtStrategy = passportJwt.Strategy;
+const ExtractStrategy = passportJwt.ExtractJwt;
+
 
 passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
     async (email, password, done) => {
       const user = await User.findOne({ email });
-
-      console.log('inside local strategy ', user);
       if (!user) return done(null, false, { message: "Invalid credentials" });
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -19,20 +22,20 @@ passport.use(
       if (!isMatch)
         return done(null, false, { message: "Invalid credentials" });
 
-      return done(null, done);
+      return done(null, user);
     }
   )
 );
 
-// passport.use(
-//   new JwtStrategy(
-//     {
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//       secretOrKey: config.JWT_SECRET,
-//     },
-//     async (jwtPayload, done) => {
-//       const user = await User.findById(jwtPayload.id);
-//       return user ? done(null, user) : done(null, false);
-//     }
-//   )
-// );
+passport.use(
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractStrategy.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.JWT_SECRET,
+    },
+    async (jwtPayload, done) => {
+      const user = await User.findById(jwtPayload.id);
+      return user ? done(null, user) : done(null, false);
+    }
+  )
+);

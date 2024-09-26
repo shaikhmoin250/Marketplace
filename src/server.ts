@@ -2,17 +2,17 @@ import express from "express";
 import mongoose from "mongoose";
 import passport from "passport";
 import config from "./config";
-import multer from "multer";
 import authRoutes from "./routes/authRoutes";
+import itemRoutes from "./routes/itemRoutes";
 
 const app = express();
 
 app.use(express.json());
 app.use(passport.initialize());
-const upload = multer();
-app.use(upload.none());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/item', itemRoutes);
+
 
 mongoose
   .connect(config.MONGODB_URI)

@@ -14,8 +14,6 @@ export class AuthController {
 
   async register(req: Request, res: Response) {
     try {
-        console.log('inside register');
-
       const user = await this.authService.register(req.body);
       res.status(201).json(user);
     } catch (error) {
@@ -24,7 +22,6 @@ export class AuthController {
   }
 
   async login(req: Request, res: Response) {
-    console.log('inside login');
     passport.authenticate('local', { session: false }, (error, user, info) => {
       if (error) {
         return res.status(500).json({ error: "Internal server error" });

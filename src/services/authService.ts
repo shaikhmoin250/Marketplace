@@ -13,8 +13,6 @@ export class AuthService {
 
     const user = new User({ ...userData, password: hasedPassword });
 
-    console.log('user', user);
-
     return await user.save();
   }
 
