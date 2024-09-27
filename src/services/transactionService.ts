@@ -1,6 +1,6 @@
 import Transaction, {
   Transaction as TransactionType,
-} from "../models/Transaction";
+} from '../models/Transaction';
 
 export class TransactionService {
   async createTransaction(transactionData: {
@@ -8,16 +8,14 @@ export class TransactionService {
     userId: string;
     sellerId: string;
     status: string;
+    time: number;
   }) {
     const transaction = new Transaction(transactionData);
     return await transaction.save();
   }
 
   async updateTransaction(id: string, itemData: any) {
-    const result = Transaction.findById(id);
-
-    console.log('id ', id);
-    console.log('item data ', itemData);
+    itemData.time = Date.now();
     return await Transaction.findByIdAndUpdate(id, itemData, { new: true });
   }
 

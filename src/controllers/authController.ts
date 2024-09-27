@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { AuthService } from "../services/authService";
-import passport from "passport";
-import config from "../config";
-import jwt from "jsonwebtoken";
-import "../middleware/passport";
+import { Request, Response } from 'express';
+import { AuthService } from '../services/authService';
+import passport from 'passport';
+import config from '../config';
+import jwt from 'jsonwebtoken';
+import '../middleware/passport';
 
 export class AuthController {
   private authService: AuthService;
@@ -24,15 +24,15 @@ export class AuthController {
   async login(req: Request, res: Response) {
     passport.authenticate('local', { session: false }, (error, user, info) => {
       if (error) {
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: 'Internal server error' });
       }
 
       if (!user) {
-        return res.status(401).json({ error: "Invalid credentials" });
+        return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      const token = jwt.sign({ id: user._id }, config.JWT_SECRET || "", {
-        expiresIn: "1h",
+      const token = jwt.sign({ id: user._id }, config.JWT_SECRET || '', {
+        expiresIn: '1h',
       });
 
       return res.status(200).json({ token });

@@ -1,21 +1,22 @@
-import mongoose, { Document, Schema} from "mongoose";
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface Item extends Document {
-    name: string;
-    description:string;
-    price:string;
-    userId:string;
-    image:string;
+  name: string;
+  description: string;
+  price: string;
+  userId: string;
+  image: string;
 }
 
-const ItemSchema:Schema = new Schema({
-    name: { type: String, required: true },
-    description : { type: String, required: true, unique: true},
-    price : { type: String, required: true},
-    userId: {type: String, required: true},
-    image : { type: String}
+const ItemSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true, unique: true },
+  price: { type: String, required: true },
+  userId: { type: String, required: true },
+  image: { type: String },
+  time: { type: Number },
 });
 
-ItemSchema.index({name:'text', description:'text'});
+ItemSchema.index({ name: 'text', description: 'text' });
 
 export default mongoose.model<Item>('Item', ItemSchema);

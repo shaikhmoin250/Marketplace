@@ -1,4 +1,4 @@
-import Item, { Item as ItemType } from "../models/Item";
+import Item, { Item as ItemType } from '../models/Item';
 
 export class ItemService {
   async addItem(itemData: any) {
@@ -7,17 +7,24 @@ export class ItemService {
   }
 
   async editItem(id: string, itemData: any) {
-    const result = Item.findById(id);
+    itemData.time = Date.now();
     return await Item.findByIdAndUpdate(id, itemData, { new: true });
   }
 
   async getItems(req: any) {
     const query = req.query;
-    console.log("query ", query);
-    return await Item.find({
-      $text: {
-        $search: query.search,
+    console.log('query ', query);
+    return await Item.find(
+      {
+        $text: {
+          $search: query.search,
+        },
       },
-    });
+      {
+        score: { $meta: 'textScore' },
+      }
+    )
+      .sort({ score: { $meta: 'textScore' } })
+      .sort({ name: 1 });
   }
 }
