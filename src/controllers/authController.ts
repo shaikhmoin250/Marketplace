@@ -4,6 +4,7 @@ import passport from 'passport';
 import config from '../config';
 import jwt from 'jsonwebtoken';
 import '../middleware/passport';
+import { validationResult } from 'express-validator';
 
 export class AuthController {
   private authService: AuthService;
@@ -12,10 +13,17 @@ export class AuthController {
     this.authService = new AuthService();
   }
 
-  async register(req: Request, res: Response) {
+  async register(req: any, res: any) {
     try {
-      const user = await this.authService.register(req.body);
-      res.status(201).json(user);
+      const error = validationResult(req);
+
+      if(!error.isEmpty()){
+        return res.status(400).json({errors:error.array()});
+      }
+      else{
+        const user = await this.authService.register(req.body);
+        res.status(201).json(user);
+      }
     } catch (error) {
       res.status(400).json({ error });
     }
